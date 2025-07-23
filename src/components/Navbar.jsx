@@ -1,4 +1,4 @@
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { Menu, Bell, User, Settings, LogOut, Moon, Sun } from "lucide-react"
 import React from "react"
 import { Button } from "@/components/ui/button"
@@ -14,6 +14,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { ModeToggle } from "./ModeToggle"
+import supabase from "../utils/supabase"
 
 const navigation = [
   { name: "Home", to: "/" },
@@ -22,7 +23,13 @@ const navigation = [
 ]
 
 export default function Navbar() {
+  const navigate = useNavigate();
 
+  async function signOut() {
+    await supabase.auth.signOut()
+    console.log("Signed out")
+    navigate("/signin")
+  }
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4">
@@ -82,7 +89,7 @@ export default function Navbar() {
                   <span>Settings</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={signOut}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>
